@@ -20,13 +20,36 @@ _zilsh_debug () {
 	fi
 }
 
-_zilsh_init () {
-	
-	_zilsh_debug "Starting..."
+_zilsh_load_bundle () {
+	_zilsh_debug "Loading bundle from $1"
 
-	#################
-	# ERROR HANDLING
-	###############
+	# Warn for missing directories
+	[[ -d "$1/configs" ]]     || _zilsh_debug "No configs directory found."
+	[[ -d "$1/completions" ]] || _zilsh_debug "No completions directory found."
+	[[ -d "$1/functions" ]]   || _zilsh_debug "No functions directory found."
+	[[ -d "$1/themes" ]]      || _zilsh_debug "No themes directory found."
+
+	# Warn for missing init file
+	[[ -f "$1/init.zsh" ]]    || _zilsh_debug "No init.zsh file found."
+
+	# Load all the .zsh files in configs/
+	if [[ -d "$1/configs" ]]; then
+		for config_file ($1/configs/*.zsh); do
+			source $config_file && _zilsh_debug "Config loaded from $config_file"
+		done
+	fi
+
+	# Add functions and completions to the fpath
+	[[ -d "$1/completions" ]] && fpath=($1/completions $fpath) && _zilsh_debug "Completions loaded."
+	[[ -d "$1/functions" ]] && fpath=($1/functions $fpath) && _zilsh_debug "Functions loaded."
+
+	# Source the init.zsh file
+	[[ -f "$1/init.zsh" ]] && source "$1/init.zsh" && _zilsh_debug "Initialized."
+	_zilsh_debug "Done loading $1"
+}
+
+_zilsh_init () {
+	_zilsh_debug "Starting..."
 
 	# Throw errors for missing or nonexistent path parameter.
 	if [[ -z "$1" ]]; then
@@ -37,39 +60,24 @@ _zilsh_init () {
 		return
 	fi
 
-	# Warn for missing directories
-	[[ -d "$ZILSHDIR/configs" ]]     || _zilsh_warn "No configs directory found."
-	[[ -d "$ZILSHDIR/plugins" ]]     || _zilsh_warn "No plugins directory found."
-	[[ -d "$ZILSHDIR/completions" ]] || _zilsh_warn "No completions directory found."
-	[[ -d "$ZILSHDIR/functions" ]]   || _zilsh_warn "No functions directory found."
-	[[ -d "$ZILSHDIR/themes" ]]      || _zilsh_warn "No themes directory found."
-
 	# So basically, this is a roundabout way to ensure that all directories are absolute.
 	command -v greadlink >/dev/null 2>&1 && {
 		# On OS X, if the GNU readlink(1) is installed, we use that instead of readlink
-		ZILSHDIR="$(greadlink --canonicalize $1)" && _zilsh_debug "Initialized in $ZILSHDIR"
+		local zilshdir="$(greadlink --canonicalize $1)" && _zilsh_debug "Initialized in $zilshdir"
 	} || {
 		# We feed the path into readlink using the --canonicalize flag to turn it absolute.
-		ZILSHDIR="$(readlink --canonicalize $1)" && _zilsh_debug "Initialized in $ZILSHDIR"
+		local zilshdir="$(readlink --canonicalize $1)" && _zilsh_debug "Initialized in $zilshdir"
 	} 2>/dev/null || {
 		_zilsh_error "Your readlink implementation lacks the --canonicalize flag.\nIf you are on OS X, install the GNU coreutils package."
 		return
 	}
 
-	# Sets up the functions/ and completions/ directories
-	fpath=($ZILSHDIR/functions $ZILSHDIR/completions $fpath)
-
-	# Load all of the config files in configs/ that end in .zsh
-	if [[ -d "$ZILSHDIR/configs" ]]; then
-		for config_file ($ZILSHDIR/configs/*.zsh); do
-			source $config_file
-		done
-	fi
-
 	# Add all defined plugins to the function path. This must be done before running compinit.
-	for plugin ($plugins); do
-		if test -f $ZILSHDIR/plugins/$name/$name.plugin.zsh || test -f $ZSH/plugins/$name/_$name; then
-			fpath=($ZILSHDIR/plugins/$plugin $fpath)
+	for bundle ($bundles); do
+		if [[ -d $zilshdir/$bundle ]]; then
+			_zilsh_load_bundle "$zilshdir/$bundle"
+		else
+			_zilsh_warn "Bundle $bundle not found in $zilshdir/bundles"
 		fi
 	done
 
@@ -77,17 +85,10 @@ _zilsh_init () {
 	autoload -U compinit
 	compinit -id "/tmp/.zcompdump"
 
-	# Load all defined plugins.
-	for plugin ($plugins); do
-		if [ -f $ZILSHDIR/plugins/$plugin/$plugin.plugin.zsh ]; then
-			source $ZILSHDIR/plugins/$plugin/$plugin.plugin.zsh
-		fi
-	done
-
 	# Load the theme
-	if (( ${+ZSH_THEME} )); then
-		if [[ -f "$ZILSHDIR/themes/$ZSH_THEME.zsh-theme" ]]; then
-			source "$ZILSHDIR/themes/$ZSH_THEME.zsh-theme"
+	if (( ${+ZILSH_THEME} )); then
+		if [[ -f "$zilshdir/themes/$ZILSH_THEME.zsh-theme" ]]; then
+			source "$zilshdir/themes/$ZILSH_THEME.zsh-theme"
 		fi
 	fi
 }
