@@ -21,8 +21,26 @@ It's not feature-rich; it's feature-less.  By design.
 -----
 -----
 
+# Why Not _________?
+Well, I'll go down the list of other options:
+
+ * **oh-my-zsh** — This is actually a damn good option as far as monolithic
+ template-based configuration systems go.  However, it has its own update system
+ which is not really compatible with dotfiles repositories.  Additionally, if
+ you don't like monolithic solutions, you probably never liked it in the first
+ plcae.
+ * **prezto** — This is far less monolithic, but still template-based and so
+ doesn't really work as a git submodule.
+ * **Doing It Yourself** — Why the fuck would you do this when you could just
+ use zilsh?
+
+All other solutions right now revolve around templates.  You install the 
+template, and then build your modifications on top.  While this is an okay
+solution in some cases (quick start with ZShell), it's really not good for those
+of us with dotfiles repositories.
+
 # Installation
-## As a git submodule
+## As a git submodule (recommended)
 Simply add this git repository as a submodule, and source `zilsh.sh` at the
 bottom of your `zshrc`. Zilsh configuration options should be added *above*
 zilsh, or else zilsh will not be able to access them (obviously)
@@ -56,14 +74,14 @@ Set this variable to control the logging level of Zilsh.
  you won't see deprecation warnings and so upgrading is dangerous.
  * `0` — no logging, not even errors.  Probably a bad idea.
 
-# ZShell Bundles
+## ZShell Bundles
 A ZShell Bundle is a directory containing a set of related functions, utilities,
 completions, etc. in the same layout as a full oh-my-zsh install.
 
 **HOWEVER**, there is one difference: lib/ is now configs/ (though lib/ still
 works for legacy reasons, it is stronly recommended that you do not use it)
 
-## Backwards Compatibility
+### Backwards Compatibility
 In case you haven't already figured it out, it's easy to use anything designed
 for oh-my-zsh (including oh-my-zsh's builtins) — just drop it in a bundle, and
 it'll work like always.
@@ -71,3 +89,9 @@ it'll work like always.
 # Future plans
  * Clean up the zshBundle layout and reduce legacy shit.
  * Add support for zsh-syntax-highlighting highlighters to zshBundles
+
+# Contribution
+All contributions should follow the coding styles set out by surrounding code.
+
+Indent with tabs; align with spaces. Yes, let me repeat that: **INDENT WITH
+TABS; ALIGN WITH SPACES**.  Got it?  Good.
