@@ -28,7 +28,7 @@ Well, I'll go down the list of other options:
  template-based configuration systems go.  However, it has its own update system
  which is not really compatible with dotfiles repositories.  Additionally, if
  you don't like monolithic solutions, you probably never liked it in the first
- plcae.
+ place.
  * **prezto** — This is far less monolithic, but still template-based and so
  doesn't really work as a git submodule.
  * **Doing It Yourself** — Why the fuck would you do this when you could just
@@ -79,7 +79,7 @@ A ZShell Bundle is a directory containing a set of related functions, utilities,
 completions, etc. in the same layout as a full oh-my-zsh install.
 
 **HOWEVER**, there is one difference: lib/ is now configs/ (though lib/ still
-works for legacy reasons, it is stronly recommended that you do not use it)
+works for legacy reasons, it is strongly recommended that you do not use it)
 
 ### Backwards Compatibility
 In case you haven't already figured it out, it's easy to use anything designed
