@@ -72,12 +72,12 @@ _zilsh_init () {
 		return
 	}
 
-	# Add all defined plugins to the function path. This must be done before running compinit.
-	for bundle ($bundles); do
+	# Load the bundles
+	for bundle ($zilshdir/*); do
 		if [[ -d $zilshdir/$bundle ]]; then
 			_zilsh_load_bundle "$zilshdir/$bundle"
 		else
-			_zilsh_warn "Bundle $bundle not found in $zilshdir/bundles"
+			_zilsh_warn "$zilshdir/$bundle is not a directory.  You really have no reason to put a file in your bundle directory."
 		fi
 	done
 
