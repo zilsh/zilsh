@@ -39,6 +39,13 @@ _zilsh_load_bundle () {
 		done
 	fi
 
+	# Add themes to $zsh_themes array
+	if [[ -d "$1/themes" ]]; then
+		for theme_file ($1/themes/*.zsh-theme); do
+			zsh_themes[$theme_name]=$theme_file
+		done
+	fi
+
 	# Add functions and completions to the fpath
 	[[ -d "$1/completions" ]] && fpath=($1/completions $fpath) && _zilsh_debug "Completions loaded."
 	[[ -d "$1/functions" ]] && fpath=($1/functions $fpath) && _zilsh_debug "Functions loaded."
@@ -72,6 +79,8 @@ _zilsh_init () {
 		return
 	}
 
+	typeset -A zsh_themes
+
 	# Load the bundles
 	for bundle ($zilshdir/*); do
 		if [[ -d $zilshdir/$bundle ]]; then
@@ -87,8 +96,8 @@ _zilsh_init () {
 
 	# Load the theme
 	if (( ${+ZILSH_THEME} )); then
-		if [[ -f "$zilshdir/themes/$ZILSH_THEME.zsh-theme" ]]; then
-			source "$zilshdir/themes/$ZILSH_THEME.zsh-theme"
+		if [[ -f $zsh_themes[$ZILSH_THEME] ]]; then
+			source $zsh_themes[$ZSH_THEME]
 		fi
 	fi
 }
