@@ -12,15 +12,6 @@ configuring their shell by hand, just to get every detail perfect.
 
 It's not feature-rich; it's feature-less.  By design.
 
------
------
-
-# This is prerelease software and is not yet recommended for everyday usage; use it at your own risk.
-## In fact, I can guarantee that it will not work.
-
------
------
-
 # Why Not _________?
 Well, I'll go down the list of other options:
 
@@ -41,9 +32,11 @@ of us with dotfiles repositories.
 
 # Installation
 ## As a git submodule (recommended)
-Simply add this git repository as a submodule, and source `zilsh.sh` at the
-bottom of your `zshrc`. Zilsh configuration options should be added *above*
-zilsh, or else zilsh will not be able to access them (obviously)
+Simply add this git repository as a submodule, and add the following to the top
+of your `.zshrc`:
+
+	source ~/.zsh/zilsh/zilsh.zsh
+	_zilsh_init "~/.zsh/bundle/"
 
 ## The manual way
 
