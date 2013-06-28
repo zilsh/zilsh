@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 [[ -z "$ZILSH_VERBOSITY" ]] && ZILSH_VERBOSITY=3
 
