@@ -17,9 +17,10 @@ Well, I'll go down the list of other options:
 
  * **oh-my-zsh** — This is actually a damn good option as far as monolithic
  template-based configuration systems go.  However, it has its own update system
- which is not really compatible with dotfiles repositories.  Additionally, if
- you don't like monolithic solutions, you probably never liked it in the first
- place.
+ which is not really compatible with dotfiles repositories, and the fact that 
+ you work inside of it instead of around it results in some [entertaining
+ bugs](https://github.com/robbyrussell/oh-my-zsh/issues/1423).  Also, if you
+ don't like monolithic solutions (I don't), you probably never liked it at all.
  * **prezto** — This is far less monolithic, but still template-based and so
  doesn't really work as a git submodule.
  * **Doing It Yourself** — Why the fuck would you do this when you could just
