@@ -56,38 +56,28 @@ _zilsh_load_bundle () {
 }
 
 _zilsh_init () {
-	_zilsh_debug "Starting..."
+	_zilsh_debug "Starting in $1..."
 
-	# Throw errors for missing or nonexistent path parameter.
+	# Throw errors for missing path parameter
 	if [[ -z "$1" ]]; then
 		_zilsh_error "No path was passed to the zilsh_init function."
 		return
-	elif [[ ! -d "$1" ]]; then
-		_zilsh_error "Nonexistent path passed to the zilsh_init function."
-		return
 	fi
 
-	# So basically, this is a roundabout way to ensure that all directories are absolute.
-	command -v greadlink >/dev/null 2>&1 && {
-		# On OS X, if the GNU readlink(1) is installed, we use that instead of readlink
-		local zilshdir="$(greadlink --canonicalize $1)" && _zilsh_debug "Initialized in $zilshdir"
-	} || {
-		# We feed the path into readlink using the --canonicalize flag to turn it absolute.
-		local zilshdir="$(readlink --canonicalize $1)" && _zilsh_debug "Initialized in $zilshdir"
-	} 2>/dev/null || {
-		_zilsh_error "Your readlink implementation lacks the --canonicalize flag.\nIf you are on OS X, install the GNU coreutils package."
-		return
-	}
+	zilshdir=${${~1}:a}
 
+	# Throw error if $zilshdir is nonexistent
+	if [[ ! -d "$zilshdir" ]]; then
+		_zilsh_error "Nonexistent path $zilshdir passed to the zilsh_init function."
+		return
+	fi
+	_zilsh_debug "Initialized in $zilshdir"
+	
 	typeset -A zsh_themes
 
 	# Load the bundles
-	for bundle ($zilshdir/*); do
-		if [[ -d $zilshdir/$bundle ]]; then
-			_zilsh_load_bundle "$zilshdir/$bundle"
-		else
-			_zilsh_warn "$zilshdir/$bundle is not a directory.  You really have no reason to put a file in your bundle directory."
-		fi
+	for bundle ($zilshdir/*(N-/)); do
+		_zilsh_load_bundle $bundle
 	done
 
 	# Load and run compinit
@@ -97,7 +87,7 @@ _zilsh_init () {
 	# Load the theme
 	if (( ${+ZILSH_THEME} )); then
 		if [[ -f $zsh_themes[$ZILSH_THEME] ]]; then
-			source $zsh_themes[$ZSH_THEME]
+			source $zsh_themes[$ZILSH_THEME]
 		fi
 	fi
 }
