@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-[[ -z "$ZILSH_VERBOSITY" ]] && ZILSH_VERBOSITY=3
+[[ -z "$ZILSH_VERBOSITY" ]] && ZILSH_VERBOSITY=2
 
 _zilsh_error () {
 	if (( $ZILSH_VERBOSITY >= 1 )); then
