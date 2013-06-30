@@ -21,38 +21,41 @@ _zilsh_debug () {
 }
 
 _zilsh_load_bundle () {
+	olddir=$PWD
+	cd $1
 	_zilsh_debug "Loading bundle from $1"
 
 	# Warn for missing directories
-	[[ -d "$1/configs" ]]     || _zilsh_debug "No configs directory found."
-	[[ -d "$1/completions" ]] || _zilsh_debug "No completions directory found."
-	[[ -d "$1/functions" ]]   || _zilsh_debug "No functions directory found."
-	[[ -d "$1/themes" ]]      || _zilsh_debug "No themes directory found."
+	[[ -d "configs" ]]     || _zilsh_debug "No configs directory found."
+	[[ -d "completions" ]] || _zilsh_debug "No completions directory found."
+	[[ -d "functions" ]]   || _zilsh_debug "No functions directory found."
+	[[ -d "themes" ]]      || _zilsh_debug "No themes directory found."
 
 	# Warn for missing init file
-	[[ -f "$1/init.zsh" ]]    || _zilsh_debug "No init.zsh file found."
+	[[ -f "init.zsh" ]]    || _zilsh_debug "No init.zsh file found."
 
 	# Load all the .zsh files in configs/
-	if [[ -d "$1/configs" ]]; then
-		for config_file ($1/configs/*.zsh); do
+	if [[ -d "configs" ]]; then
+		for config_file (configs/*.zsh); do
 			source $config_file && _zilsh_debug "Config loaded from $config_file"
 		done
 	fi
 
 	# Add themes to $zsh_themes array
-	if [[ -d "$1/themes" ]]; then
-		for theme_file ($1/themes/*.zsh-theme); do
-			zsh_themes[$theme_name]=$theme_file
+	if [[ -d "themes" ]]; then
+		for theme_file (themes/*.zsh-theme); do
+			zsh_themes[$theme_name]=${theme_file:a}
 		done
 	fi
 
 	# Add functions and completions to the fpath
-	[[ -d "$1/completions" ]] && fpath=($1/completions $fpath) && _zilsh_debug "Completions loaded."
-	[[ -d "$1/functions" ]] && fpath=($1/functions $fpath) && _zilsh_debug "Functions loaded."
+	[[ -d "completions" ]] && fpath=(completions(:a) $fpath) && _zilsh_debug "Completions loaded."
+	[[ -d "functions" ]] && fpath=(functions(:a) $fpath) && _zilsh_debug "Functions loaded."
 
 	# Source the init.zsh file
-	[[ -f "$1/init.zsh" ]] && source "$1/init.zsh" && _zilsh_debug "Initialized."
+	[[ -f "init.zsh" ]] && source "init.zsh" && _zilsh_debug "Bundle in $1 initialized."
 	_zilsh_debug "Done loading $1"
+	cd $olddir
 }
 
 _zilsh_init () {
