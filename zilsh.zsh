@@ -76,7 +76,7 @@ _zilsh_init () {
 	fi
 	_zilsh_debug "Initialized in $zilshdir"
 	
-	typeset -A zsh_themes
+	typeset -Ag zsh_themes
 
 	# Load the bundles
 	for bundle ($zilshdir/*(N-/)); do
