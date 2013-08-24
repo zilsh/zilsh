@@ -21,6 +21,11 @@ totally should too (not that I'm biased or anything).
 # Why Not _________?
 Well, I'll go down the list of other options:
 
+ * **antigen** — Probably the best alternative to zilsh, in all honesty;
+ however, it follows the Vundle approach, not the Pathogen approach.  Not that
+ that's bad, it's not!  It's just not how I like to do things.  I like manually
+ controlling my plugins as git submodules.  Plus zilsh is over 600 lines
+ shorter than antigen.
  * **oh-my-zsh** — This is actually a damn good option as far as monolithic
  template-based configuration systems go.  However, it has its own update system
  which is not really compatible with dotfiles repositories, and the fact that 
