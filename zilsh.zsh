@@ -78,10 +78,6 @@ _zilsh_init () {
 	
 	typeset -Ag zsh_themes
 
-	# Load and run compinit
-	autoload -U compinit
-	compinit -id "/tmp/.zcompdump"
-
 	# Load the bundles
 	for bundle ($zilshdir/*(N-/)); do
 		_zilsh_load_bundle $bundle
