@@ -2,15 +2,17 @@
 Zilsh is a Zshell configuration framework designed to *get the fuck out of your
 way.*
 
+Zilsh started as a fork of oh-my-zsh, but totally ceased being that within a
+week.  Now it's a better system, but it's still 100% compatible with oh-my-zsh,
+via the wonderful [oh-my-zilsh](https://github.com/NuckChorris/oh-my-zilsh)
+bundle, which should stay (fairly) close to oh-my-zsh's HEAD.
 
-Zilsh is a fork of oh-my-zsh, and is backwards-compatible, but the legacy
-systems are permanantly deprecated.  Use zshbundles where possible.
+I've designed this specifically for the crazy power users who want to go through
+the manual labor of configuring their shell by hand, just to get every detail
+perfect.
 
-If you're looking for an out-of-the-box, pre-configured shell, this is not for
-you.  This is for the power users who want to go through the manual labor of
-configuring their shell by hand, just to get every detail perfect.
-
-It's not feature-rich; it's feature-less.  By design.
+It's not feature-rich; it's feature-less.  By design.  It weighs in at under 100
+lines (97 to be precise).
 
 I use it for my
 [dotfiles](https://github.com/NuckChorris/dotfiles/tree/master/zsh), and you
