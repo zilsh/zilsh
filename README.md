@@ -12,6 +12,10 @@ configuring their shell by hand, just to get every detail perfect.
 
 It's not feature-rich; it's feature-less.  By design.
 
+I use it for my
+[dotfiles](https://github.com/NuckChorris/dotfiles/tree/master/zsh), and you
+totally should too (not that I'm biased or anything).
+
 # Why Not _________?
 Well, I'll go down the list of other options:
 
