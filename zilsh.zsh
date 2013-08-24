@@ -78,14 +78,14 @@ _zilsh_init () {
 	
 	typeset -A zsh_themes
 
+	# Load and run compinit
+	autoload -U compinit
+	compinit -id "/tmp/.zcompdump"
+
 	# Load the bundles
 	for bundle ($zilshdir/*(N-/)); do
 		_zilsh_load_bundle $bundle
 	done
-
-	# Load and run compinit
-	autoload -U compinit
-	compinit -id "/tmp/.zcompdump"
 
 	# Load the theme
 	if (( ${+ZILSH_THEME} )); then
