@@ -21,7 +21,7 @@ _zilsh_debug () {
 }
 
 _zilsh_load_bundle () {
-	olddir=$PWD
+	local olddir=$PWD
 	cd $1
 	_zilsh_debug "Loading bundle from $1"
 
