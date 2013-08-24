@@ -49,7 +49,11 @@ of your `.zshrc`:
 
 	$ cd ~/.zsh
 	$ git clone https://github.com/NuckChorris/zilsh.git
-	$ echo "source ~/.zsh/zilsh/zilsh.sh" >> ~/.zshrc
+
+And then add the following to the top of your `.zshrc`:
+
+	source ~/.zsh/zilsh/zilsh.zsh
+	_zilsh_init "~/.zsh/bundle/"
 
 # Configuration
 Zilsh provides a number of useful configuration options which allow you to fine-
