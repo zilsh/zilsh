@@ -84,6 +84,9 @@ In case you haven't already figured it out, it's easy to use anything designed
 for oh-my-zsh (including oh-my-zsh's builtins) — just drop it in a bundle, and
 it'll work like always.
 
+An example of an oh-my-zsh wrapper bundle is provided in
+[oh-my-zilsh](https://github.com/NuckChorris/oh-my-zilsh).
+
 # Future plans
  * Clean up the zshBundle layout and reduce legacy shit.
  * Add support for zsh-syntax-highlighting highlighters to zshBundles
