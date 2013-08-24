@@ -93,4 +93,5 @@ _zilsh_init () {
 			source $zsh_themes[$ZILSH_THEME]
 		fi
 	fi
+	wait
 }
