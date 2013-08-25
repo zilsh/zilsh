@@ -26,19 +26,11 @@ _zilsh_load_bundle () {
 	_zilsh_debug "Loading bundle from $1"
 
 	# Log debug messages for missing directories
-	[[ -d "configs" ]]     || _zilsh_debug "  No configs directory found."
 	[[ -d "functions" ]]   || _zilsh_debug "  No functions directory found."
 	[[ -d "themes" ]]      || _zilsh_debug "  No themes directory found."
 
 	# Warn for missing init file
 	[[ -f "init.zsh" ]]    || _zilsh_debug "  No init.zsh file found."
-
-	# Load all the .zsh files in configs/
-	if [[ -d "configs" ]]; then
-		for config_file (configs/*.zsh); do
-			source $config_file && _zilsh_debug "  Config loaded from $config_file"
-		done
-	fi
 
 	# Add themes to $zsh_themes array
 	if [[ -d "themes" ]]; then
