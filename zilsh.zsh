@@ -25,12 +25,14 @@ _zilsh_load_bundle () {
 	cd $1
 	_zilsh_debug "Loading bundle from $1"
 
-	# Log debug messages for missing directories
-	[[ -d "functions" ]]   || _zilsh_debug "  No functions directory found."
-	[[ -d "themes" ]]      || _zilsh_debug "  No themes directory found."
+	# Log debug messages for missing directories and files
+	[[ -d "functions" ]]       || _zilsh_debug "  No functions directory found."
+	[[ -d "themes" ]]          || _zilsh_debug "  No themes directory found."
+	[[ -f "aliases.zsh" ]]     || _zilsh_debug "  No aliases file found."
+	[[ -f "keybindings.zsh" ]] || _zilsh_debug "  No keybindings file found."
 
 	# Warn for missing init file
-	[[ -f "init.zsh" ]]    || _zilsh_debug "  No init.zsh file found."
+	[[ -f "init.zsh" ]]        || _zilsh_debug "  No init file found."
 
 	# Add themes to $zsh_themes array
 	if [[ -d "themes" ]]; then
