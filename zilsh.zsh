@@ -27,7 +27,6 @@ _zilsh_load_bundle () {
 
 	# Log debug messages for missing directories
 	[[ -d "configs" ]]     || _zilsh_debug "  No configs directory found."
-	[[ -d "completions" ]] || _zilsh_debug "  No completions directory found."
 	[[ -d "functions" ]]   || _zilsh_debug "  No functions directory found."
 	[[ -d "themes" ]]      || _zilsh_debug "  No themes directory found."
 
@@ -48,8 +47,7 @@ _zilsh_load_bundle () {
 		done
 	fi
 
-	# Add functions and completions to the fpath
-	[[ -d "completions" ]] && fpath=(completions(:a) $fpath) && _zilsh_debug "  Completions loaded."
+	# Add functions to the fpath
 	[[ -d "functions" ]] && fpath=(functions(:a) $fpath) && _zilsh_debug "  Functions loaded."
 
 	# Source the init.zsh file
