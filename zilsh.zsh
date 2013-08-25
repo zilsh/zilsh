@@ -30,8 +30,6 @@ _zilsh_load_bundle () {
 	[[ -d "themes" ]]          || _zilsh_debug "  No themes directory found."
 	[[ -f "aliases.zsh" ]]     || _zilsh_debug "  No aliases file found."
 	[[ -f "keybindings.zsh" ]] || _zilsh_debug "  No keybindings file found."
-
-	# Warn for missing init file
 	[[ -f "init.zsh" ]]        || _zilsh_debug "  No init file found."
 
 	# Add themes to $zsh_themes array
