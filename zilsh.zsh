@@ -26,11 +26,17 @@ _zilsh_load_bundle () {
 	_zilsh_debug "Loading bundle from $1"
 
 	# Log debug messages for missing directories and files
+	[[ -f "guard.zsh" ]]       || _zilsh_debug "  No guard file found."
 	[[ -d "functions" ]]       || _zilsh_debug "  No functions directory found."
 	[[ -d "themes" ]]          || _zilsh_debug "  No themes directory found."
 	[[ -f "aliases.zsh" ]]     || _zilsh_debug "  No aliases file found."
 	[[ -f "keybindings.zsh" ]] || _zilsh_debug "  No keybindings file found."
 	[[ -f "init.zsh" ]]        || _zilsh_debug "  No init file found."
+
+	if [[ -f "guard.zsh" ]] && zsh "./guard.zsh"; then
+		_zilsh_warn "  Guardfile exited nonzero, aborting load."
+		return 1
+	fi
 
 	# Add themes to $zsh_themes array
 	if [[ -d "themes" ]]; then
