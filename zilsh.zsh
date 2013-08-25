@@ -42,6 +42,15 @@ _zilsh_load_bundle () {
 	# Add functions to the fpath
 	[[ -d "functions" ]] && fpath=(functions(:a) $fpath) && _zilsh_debug "  Functions loaded."
 
+	# Load aliases
+	# This is temporary, eventually the plan is to use `aliases/*.zsh-alias` instead.  But that takes
+	# a bit more work to get right, this is more loose and can easily be switched to that without
+	# breaking anything.
+	[[ -f "aliases.zsh" ]] && source "aliases.zsh" && _zilsh_debug "  Aliases loaded."
+
+	# load keybindings
+	[[ -f "keybindings.zsh" ]] && source "keybindings.zsh" && _zilsh_debug "  Keybindings loaded."
+
 	# Source the init.zsh file
 	[[ -f "init.zsh" ]] && source "init.zsh" && _zilsh_debug "Bundle in $1 initialized."
 	_zilsh_debug "Done loading $1"
