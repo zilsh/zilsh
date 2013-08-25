@@ -25,7 +25,7 @@ _zilsh_load_bundle () {
 	cd $1
 	_zilsh_debug "Loading bundle from $1"
 
-	# Warn for missing directories
+	# Log debug messages for missing directories
 	[[ -d "configs" ]]     || _zilsh_debug "  No configs directory found."
 	[[ -d "completions" ]] || _zilsh_debug "  No completions directory found."
 	[[ -d "functions" ]]   || _zilsh_debug "  No functions directory found."
