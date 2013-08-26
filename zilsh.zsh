@@ -46,7 +46,11 @@ _zilsh_load_bundle () {
 	fi
 
 	# Add functions to the fpath
-	[[ -d "functions" ]] && fpath=(functions(:a) $fpath) && _zilsh_debug "  Functions loaded."
+	if [[ -d "functions" ]]; then
+		fpath=(functions(:a) $fpath)
+		autoload functions/*(:t)
+		_zilsh_debug "  Functions loaded."
+	fi
 
 	# Load aliases
 	# This is temporary, eventually the plan is to use `aliases/*.zsh-alias` instead.  But that takes
