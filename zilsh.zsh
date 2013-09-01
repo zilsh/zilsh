@@ -21,34 +21,32 @@ _zilsh_debug () {
 }
 
 _zilsh_load_bundle () {
-	local olddir=$PWD
-	cd $1
 	_zilsh_debug "Loading bundle from $1"
 
 	# Log debug messages for missing directories and files
-	[[ -f "guard.zsh" ]]       || _zilsh_debug "  No guard file found."
-	[[ -d "functions" ]]       || _zilsh_debug "  No functions directory found."
-	[[ -d "themes" ]]          || _zilsh_debug "  No themes directory found."
-	[[ -f "aliases.zsh" ]]     || _zilsh_debug "  No aliases file found."
-	[[ -f "keybindings.zsh" ]] || _zilsh_debug "  No keybindings file found."
-	[[ -f "init.zsh" ]]        || _zilsh_debug "  No init file found."
+	[[ -f "$1/guard.zsh" ]]       || _zilsh_debug "  No guard file found."
+	[[ -d "$1/functions" ]]       || _zilsh_debug "  No functions directory found."
+	[[ -d "$1/themes" ]]          || _zilsh_debug "  No themes directory found."
+	[[ -f "$1/aliases.zsh" ]]     || _zilsh_debug "  No aliases file found."
+	[[ -f "$1/keybindings.zsh" ]] || _zilsh_debug "  No keybindings file found."
+	[[ -f "$1/init.zsh" ]]        || _zilsh_debug "  No init file found."
 
-	if [[ -f "guard.zsh" ]] && zsh "./guard.zsh"; then
+	if [[ -f "$1/guard.zsh" ]] && zsh "$1/guard.zsh"; then
 		_zilsh_warn "  Guardfile exited nonzero, aborting load."
 		return 1
 	fi
 
 	# Add themes to $zsh_themes array
-	if [[ -d "themes" ]]; then
-		for theme_file (themes/*.zsh-theme); do
+	if [[ -d "$1/themes" ]]; then
+		for theme_file ($1/themes/*.zsh-theme); do
 			zsh_themes[$theme_name]=${theme_file:a}
 		done
 	fi
 
 	# Add functions to the fpath
-	if [[ -d "functions" ]]; then
-		fpath=(functions(:a) $fpath)
-		autoload functions/*(:t)
+	if [[ -d "$1/functions" ]]; then
+		fpath=($1/functions(:a) $fpath)
+		autoload $1/functions/*(:t)
 		_zilsh_debug "  Functions loaded."
 	fi
 
@@ -56,15 +54,14 @@ _zilsh_load_bundle () {
 	# This is temporary, eventually the plan is to use `aliases/*.zsh-alias` instead.  But that takes
 	# a bit more work to get right, this is more loose and can easily be switched to that without
 	# breaking anything.
-	[[ -f "aliases.zsh" ]] && source "aliases.zsh" && _zilsh_debug "  Aliases loaded."
+	[[ -f "$1/aliases.zsh" ]] && source "$1/aliases.zsh" && _zilsh_debug "  Aliases loaded."
 
 	# load keybindings
-	[[ -f "keybindings.zsh" ]] && source "keybindings.zsh" && _zilsh_debug "  Keybindings loaded."
+	[[ -f "$1/keybindings.zsh" ]] && source "$1/keybindings.zsh" && _zilsh_debug "  Keybindings loaded."
 
 	# Source the init.zsh file
-	[[ -f "init.zsh" ]] && source "init.zsh" && _zilsh_debug "Bundle in $1 initialized."
+	[[ -f "$1/init.zsh" ]] && source "$1/init.zsh" && _zilsh_debug "Bundle in $1 initialized."
 	_zilsh_debug "Done loading $1"
-	cd $olddir
 }
 
 _zilsh_init () {
