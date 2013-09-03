@@ -80,7 +80,7 @@ _zilsh_init () {
 		return
 	fi
 
-	zilshdir=${${~1}:a}
+	local zilshdir=${${~1}:a}
 
 	# Throw error if $zilshdir is nonexistent
 	if [[ ! -d "$zilshdir" ]]; then
