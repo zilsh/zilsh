@@ -23,6 +23,11 @@ _zilsh_debug () {
 _zilsh_load_bundle () {
 	_zilsh_debug "Loading bundle from $1"
 
+        # Keep the old BUNDLE_DIR so that we can restore it later, allowing
+        # bundles to be loaded recursively
+	local old_bundle_dir=$BUNDLE_DIR
+	BUNDLE_DIR=$1
+
 	# Log debug messages for missing directories and files
 	[[ -f "$1/guard.zsh" ]]       || _zilsh_debug "  No guard file found."
 	[[ -d "$1/functions" ]]       || _zilsh_debug "  No functions directory found."
@@ -61,6 +66,8 @@ _zilsh_load_bundle () {
 
 	# Source the init.zsh file
 	[[ -f "$1/init.zsh" ]] && source "$1/init.zsh" && _zilsh_debug "Bundle in $1 initialized."
+
+	BUNDLE_DIR=$old_bundle_dir
 	_zilsh_debug "Done loading $1"
 }
 
