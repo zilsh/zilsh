@@ -44,7 +44,7 @@ _zilsh_load_bundle () {
 	# Add themes to $zsh_themes array
 	if [[ -d "$BUNDLE_DIR/themes" ]]; then
 		for theme_file ($BUNDLE_DIR/themes/*.zsh-theme); do
-			zsh_themes[$theme_name]=${theme_file:a}
+			zsh_themes[${theme_file:t:r}]=${theme_file:a}
 		done
 	fi
 
