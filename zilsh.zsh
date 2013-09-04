@@ -1,5 +1,3 @@
-#!/usr/bin/env zsh
-
 [[ -z "$ZILSH_VERBOSITY" ]] && ZILSH_VERBOSITY=2
 
 _zilsh_error () {
@@ -20,7 +18,7 @@ _zilsh_debug () {
 	fi
 }
 
-_zilsh_load_bundle () {
+zilsh_load_bundle () {
 	# Keep the old BUNDLE_DIR so that we can restore it later, allowing
 	# bundles to be loaded recursively
 	local old_bundle_dir=$BUNDLE_DIR
@@ -29,12 +27,12 @@ _zilsh_load_bundle () {
 	_zilsh_debug "Loading bundle from $BUNDLE_DIR"
 
 	# Log debug messages for missing directories and files
-	[[ -f "$BUNDLE_DIR/guard.zsh" ]]       || _zilsh_debug "  No guard file found."
-	[[ -d "$BUNDLE_DIR/functions" ]]       || _zilsh_debug "  No functions directory found."
-	[[ -d "$BUNDLE_DIR/themes" ]]          || _zilsh_debug "  No themes directory found."
-	[[ -f "$BUNDLE_DIR/aliases.zsh" ]]     || _zilsh_debug "  No aliases file found."
+	[[ -f "$BUNDLE_DIR/guard.zsh" ]]	   || _zilsh_debug "  No guard file found."
+	[[ -d "$BUNDLE_DIR/functions" ]]	   || _zilsh_debug "  No functions directory found."
+	[[ -d "$BUNDLE_DIR/themes" ]]		  || _zilsh_debug "  No themes directory found."
+	[[ -f "$BUNDLE_DIR/aliases.zsh" ]]	 || _zilsh_debug "  No aliases file found."
 	[[ -f "$BUNDLE_DIR/keybindings.zsh" ]] || _zilsh_debug "  No keybindings file found."
-	[[ -f "$BUNDLE_DIR/init.zsh" ]]        || _zilsh_debug "  No init file found."
+	[[ -f "$BUNDLE_DIR/init.zsh" ]]		|| _zilsh_debug "  No init file found."
 
 	if [[ -f "$BUNDLE_DIR/guard.zsh" ]] && zsh "$BUNDLE_DIR/guard.zsh"; then
 		_zilsh_warn "  Guardfile exited nonzero, aborting load."
@@ -71,7 +69,7 @@ _zilsh_load_bundle () {
 	BUNDLE_DIR=$old_bundle_dir
 }
 
-_zilsh_init () {
+zilsh_init () {
 	_zilsh_debug "Starting in $1..."
 
 	# Throw errors for missing path parameter
@@ -97,7 +95,7 @@ _zilsh_init () {
 
 	# Load the bundles
 	for bundle ($zilshdir/*(N-/)); do
-		_zilsh_load_bundle $bundle
+		zilsh_load_bundle $bundle
 	done
 
 	# Load the theme
@@ -107,4 +105,10 @@ _zilsh_init () {
 		fi
 	fi
 	wait
+}
+
+# this is here just to preserve compatibility, it's deprecated and will be
+# removed in a later version
+_zilsh_init() {
+	zilsh_init "$@"
 }
