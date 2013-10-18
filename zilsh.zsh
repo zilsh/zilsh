@@ -27,12 +27,12 @@ zilsh_load_bundle () {
 	_zilsh_debug "Loading bundle from $BUNDLE_DIR"
 
 	# Log debug messages for missing directories and files
-	[[ -f "$BUNDLE_DIR/guard.zsh" ]]	   || _zilsh_debug "  No guard file found."
-	[[ -d "$BUNDLE_DIR/functions" ]]	   || _zilsh_debug "  No functions directory found."
-	[[ -d "$BUNDLE_DIR/themes" ]]		  || _zilsh_debug "  No themes directory found."
-	[[ -f "$BUNDLE_DIR/aliases.zsh" ]]	 || _zilsh_debug "  No aliases file found."
+	[[ -f "$BUNDLE_DIR/guard.zsh" ]]       || _zilsh_debug "  No guard file found."
+	[[ -d "$BUNDLE_DIR/functions" ]]       || _zilsh_debug "  No functions directory found."
+	[[ -d "$BUNDLE_DIR/themes" ]]          || _zilsh_debug "  No themes directory found."
+	[[ -f "$BUNDLE_DIR/aliases.zsh" ]]     || _zilsh_debug "  No aliases file found."
 	[[ -f "$BUNDLE_DIR/keybindings.zsh" ]] || _zilsh_debug "  No keybindings file found."
-	[[ -f "$BUNDLE_DIR/init.zsh" ]]		|| _zilsh_debug "  No init file found."
+	[[ -f "$BUNDLE_DIR/init.zsh" ]]        || _zilsh_debug "  No init file found."
 
 	if [[ -f "$BUNDLE_DIR/guard.zsh" ]] && zsh "$BUNDLE_DIR/guard.zsh"; then
 		_zilsh_warn "  Guardfile exited nonzero, aborting load."
