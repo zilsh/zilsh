@@ -50,7 +50,7 @@ _zilsh_load_bundle () {
 
 	# Add functions and completions to the fpath
 	[[ -d "completions" ]] && fpath=(completions(:a) $fpath) && _zilsh_debug "  Completions loaded."
-	[[ -d "functions" ]] && fpath=(functions(:a) $fpath) && _zilsh_debug "  Functions loaded."
+	[[ -d "functions" ]] && fpath=(functions(:a) $fpath) && autoload functions/*(:t) && _zilsh_debug "  Functions loaded."
 
 	# Source the init.zsh file
 	[[ -f "init.zsh" ]] && source "init.zsh" && _zilsh_debug "Bundle in $1 initialized."
