@@ -1,5 +1,3 @@
-#!/usr/bin/env zsh
-
 [[ -z "$ZILSH_VERBOSITY" ]] && ZILSH_VERBOSITY=2
 
 _zilsh_error () {
@@ -20,7 +18,7 @@ _zilsh_debug () {
 	fi
 }
 
-_zilsh_load_bundle () {
+zilsh_load_bundle () {
 	# Keep the old BUNDLE_DIR so that we can restore it later, allowing
 	# bundles to be loaded recursively
 	local old_bundle_dir=$BUNDLE_DIR
@@ -71,7 +69,7 @@ _zilsh_load_bundle () {
 	BUNDLE_DIR=$old_bundle_dir
 }
 
-_zilsh_init () {
+zilsh_init () {
 	_zilsh_debug "Starting in $1..."
 
 	# Throw errors for missing path parameter
@@ -97,7 +95,7 @@ _zilsh_init () {
 
 	# Load the bundles
 	for bundle ($zilshdir/*(N-/)); do
-		_zilsh_load_bundle $bundle
+		zilsh_load_bundle $bundle
 	done
 
 	# Load the theme
@@ -107,4 +105,10 @@ _zilsh_init () {
 		fi
 	fi
 	wait
+}
+
+# this is here just to preserve compatibility, it's deprecated and will be
+# removed in a later version
+_zilsh_init() {
+	zilsh_init "$@"
 }
