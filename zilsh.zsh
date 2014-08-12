@@ -1,5 +1,6 @@
 [[ -z "$ZILSH_VERBOSITY" ]] && ZILSH_VERBOSITY=2
 
+### Zilsh Logging Utilities
 zilsh_error () {
 	if (( $ZILSH_VERBOSITY >= 1 )); then
 		printf "${fg_bold[red]}[Zilsh Error]${reset_color} $1\n" 1>&2
@@ -18,13 +19,27 @@ zilsh_debug () {
 	fi
 }
 
+
+### Zilsh Benchmarking Utilities
+zilsh_bench_start () {
+	date +"%s.%N"
+}
+
+zilsh_bench_end () {
+	printf "%.4fsec" $(($(date +%s.%N) - $1))
+}
+
+
+### Zilsh Itself
 zilsh_load_bundle () {
+	# TODO: switch to the zsh directory stack
 	# Keep the old BUNDLE_DIR so that we can restore it later, allowing
 	# bundles to be loaded recursively
 	local old_bundle_dir=$BUNDLE_DIR
 	BUNDLE_DIR=$1
 
 	zilsh_debug "Loading bundle from $BUNDLE_DIR"
+	timer=$(zilsh_bench_start)
 
 	# Log debug messages for missing directories and files
 	[[ -f "$BUNDLE_DIR/guard.zsh" ]]       || zilsh_debug "  No guard file found."
@@ -65,7 +80,7 @@ zilsh_load_bundle () {
 	# Source the init.zsh file
 	[[ -f "$BUNDLE_DIR/init.zsh" ]] && source "$BUNDLE_DIR/init.zsh" && zilsh_debug "Bundle in $BUNDLE_DIR initialized."
 
-	zilsh_debug "Done loading $BUNDLE_DIR"
+	zilsh_debug "Done loading $BUNDLE_DIR (Took $(zilsh_bench_end $timer))"
 	BUNDLE_DIR=$old_bundle_dir
 }
 
