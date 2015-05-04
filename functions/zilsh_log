@@ -1,0 +1,12 @@
+## zilsh_log error|warn|debug message
+# Log message with a given warning level, with colors, and nesting.
+
+local -A levels
+levels=(error 1 warn 2 debug 3)
+
+# Capitalize first letter
+local tag="[${(C)1[1]}${1[2,-1]}]"
+
+if (( $ZILSH_VERBOSITY >= ${levels[$1]-0} )); then
+	printf "${fg_bold[blue]}${tag}${reset_color} ${ZILSH_LOG_NESTING}${1}\n" 1>&2
+fi

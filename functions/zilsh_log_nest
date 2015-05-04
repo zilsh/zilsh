@@ -1,0 +1,8 @@
+## zilsh_log_nest [-1|+1|0]
+# Changes zilsh_log nesting level -=1, +=1, or =0
+
+case "$1" in
+	+1) ZILSH_LOG_NESTING+=' ';;
+	-1) ZILSH_LOG_NESTING=${ZILSH_LOG_NESTING# };;
+	0) ZILSH_LOG_NESTING='';;
+esac

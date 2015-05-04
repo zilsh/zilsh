@@ -1,0 +1,58 @@
+## zilsh_load_plugin(directory)
+# Loads and executes a plugin in $directory
+
+# TODO: switch to the zsh directory stack
+# Keep the old PLUGIN_DIR so that we can restore it later, allowing plugins to be loaded
+# recursively.
+local old_plugin_dir=$PLUGIN_DIR
+PLUGIN_DIR=$1
+
+zilsh_debug "Loading plugin from $PLUGIN_DIR"
+zilsh_log_nest +1
+timer=$(zilsh_bench_start)
+
+if [[ -f "$PLUGIN_DIR/guard.zsh" ]] && ! zsh "$PLUGIN_DIR/guard.zsh"; then
+	zilsh_log debug "Guardfile exited nonzero, aborting load."
+	return 1
+fi
+
+# Log debug messages for missing directories and files
+[[ -f "$PLUGIN_DIR/guard.zsh" ]]       || zilsh_log debug "No guard file found."
+[[ -d "$PLUGIN_DIR/functions" ]]       || zilsh_log debug "No functions directory found."
+[[ -d "$PLUGIN_DIR/themes" ]]          || zilsh_log debug "No themes directory found."
+[[ -f "$PLUGIN_DIR/aliases.zsh" ]]     || zilsh_log debug "No aliases file found."
+[[ -f "$PLUGIN_DIR/keybindings.zsh" ]] || zilsh_log debug "No keybindings file found."
+[[ -f "$PLUGIN_DIR/init.zsh" ]]        || zilsh_log debug "No init file found."
+
+# Add themes to $zsh_themes array
+if [[ -d "$PLUGIN_DIR/themes" ]]; then
+	for theme_file ($PLUGIN_DIR/themes/*.zsh-theme); do
+		zsh_themes[${theme_file:t:r}]=${theme_file:a}
+	done
+fi
+
+# Add functions to the fpath
+if [[ -d "$PLUGIN_DIR/functions" ]]; then
+	fpath=($PLUGIN_DIR/functions(:a) $fpath)
+	autoload $PLUGIN_DIR/functions/*(:t)
+	zilsh_log debug "  Functions loaded."
+fi
+
+# Load aliases
+# This is temporary, eventually the plan is to use `aliases/*.zsh-alias` instead.  But that takes
+# a bit more work to get right, this is more loose and can easily be switched to that without
+# breaking anything.
+[[ -f "$PLUGIN_DIR/aliases.zsh" ]] && source "$PLUGIN_DIR/aliases.zsh"\
+                                   && zilsh_log debug "  Aliases loaded."
+
+# load keybindings
+[[ -f "$PLUGIN_DIR/keybindings.zsh" ]] && source "$PLUGIN_DIR/keybindings.zsh"\
+                                       && zilsh_log debug "  Keybindings loaded."
+
+# Source the init.zsh file
+[[ -f "$PLUGIN_DIR/init.zsh" ]] && source "$PLUGIN_DIR/init.zsh"\
+                                && zilsh_log debug "Bundle in $PLUGIN_DIR initialized."
+
+zilsh_debug "Done loading $PLUGIN_DIR (Took $(zilsh_bench_end $timer))"
+PLUGIN_DIR=$old_plugin_dir
+

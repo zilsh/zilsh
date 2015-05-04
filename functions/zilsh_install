@@ -4,6 +4,6 @@
 pushd $1
 for plugin ($ZILSH_PLUGINS); do
 	git clone $plugin
-	zilsh_load_bundle $plugin
+	zilsh_load_plugin $plugin
 done
 popd

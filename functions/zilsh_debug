@@ -1,3 +1,0 @@
-if (( $ZILSH_VERBOSITY >= 3 )); then
-	printf "${fg_bold[blue]}[Zilsh Debug]${reset_color} $1\n" 1>&2
-fi

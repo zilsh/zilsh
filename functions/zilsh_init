@@ -1,8 +1,9 @@
-zilsh_debug "Starting in $1..."
+zilsh_log_nest 0
+zilsh_log debug "Starting in $1..."
 
 # Throw errors for missing path parameter
 if [[ -z "$1" ]]; then
-	zilsh_error "No path was passed to the zilsh_init function."
+	zilsh_log error "No path was passed to the zilsh_init function."
 	return
 fi
 
@@ -10,10 +11,10 @@ local zilshdir=${${~1}:a}
 
 # Throw error if $zilshdir is nonexistent
 if [[ ! -d "$zilshdir" ]]; then
-	zilsh_error "Nonexistent path $zilshdir passed to the zilsh_init function."
+	zilsh_log error "Nonexistent path $zilshdir passed to the zilsh_init function."
 	return
 fi
-zilsh_debug "Initialized in $zilshdir"
+zilsh_log debug "Initialized in $zilshdir"
 
 typeset -Ag zsh_themes
 
@@ -21,9 +22,10 @@ typeset -Ag zsh_themes
 autoload -U compinit
 compinit -id "$ZILSH_CACHE_DIR.zcompdump"
 
-# Load the bundles
-for bundle ($zilshdir/*(N-/)); do
-	zilsh_load_bundle $bundle
+# Load the plugin
+zilsh_log_nest +1
+for plugin ($zilshdir/*(N-/)); do
+	zilsh_load_plugin $plugin
 done
 
 # Load the theme

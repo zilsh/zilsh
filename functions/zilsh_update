@@ -19,12 +19,12 @@ else # single plugin mode
 		
 		if [[ $current_commit == $upstream_commit ]]; then
 			git merge --ff-only @{upstream} ||
-				zilsh_error "An error occured while updating $2"
+				zilsh_log error "An error occured while updating $2"
 		elif [[ -n "$4" ]]; then # FORCE MODE
 			git reset --hard @{upstream} ||
-				zilsh_error "An error occured while updating $2"
+				zilsh_log error "An error occured while updating $2"
 		else
-			zilsh_error "Could not safely update $2; skipping."
+			zilsh_log error "Could not safely update $2; skipping."
 		fi
 	fi
 fi
