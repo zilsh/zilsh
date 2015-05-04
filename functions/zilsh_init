@@ -1,0 +1,35 @@
+zilsh_debug "Starting in $1..."
+
+# Throw errors for missing path parameter
+if [[ -z "$1" ]]; then
+	zilsh_error "No path was passed to the zilsh_init function."
+	return
+fi
+
+local zilshdir=${${~1}:a}
+
+# Throw error if $zilshdir is nonexistent
+if [[ ! -d "$zilshdir" ]]; then
+	zilsh_error "Nonexistent path $zilshdir passed to the zilsh_init function."
+	return
+fi
+zilsh_debug "Initialized in $zilshdir"
+
+typeset -Ag zsh_themes
+
+# Load and run compinit
+autoload -U compinit
+compinit -id "$ZILSH_CACHE_DIR.zcompdump"
+
+# Load the bundles
+for bundle ($zilshdir/*(N-/)); do
+	zilsh_load_bundle $bundle
+done
+
+# Load the theme
+if (( ${+ZILSH_THEME} )); then
+	if [[ -f $zsh_themes[$ZILSH_THEME] ]]; then
+		source $zsh_themes[$ZILSH_THEME]
+	fi
+fi
+wait
