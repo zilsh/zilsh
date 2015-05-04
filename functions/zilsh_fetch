@@ -1,0 +1,11 @@
+## zilsh_fetch(zilsh_dir, [plugin])
+
+if [[ -z "$2" ]]; then
+	for plugin ($ZILSH_PLUGINS); do
+		zilsh_fetch $1 $plugin
+	done
+else
+	pushd $1/$2
+	git fetch
+	popd
+fi

@@ -1,0 +1,9 @@
+## zilsh_install(zilsh_dir)
+# Installs a plugin into $zilsh_dir
+
+pushd $1
+for plugin ($ZILSH_PLUGINS); do
+	git clone $plugin
+	zilsh_load_bundle $plugin
+done
+popd

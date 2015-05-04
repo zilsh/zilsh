@@ -1,0 +1,30 @@
+## zilsh_update(zilsh_dir, [plugin, [tag, [force]]])
+# Updates zilsh plugins to the latest version, or optionally updates a single
+# plugin.  In single-plugin mode, you can also select the tag to update to or
+# provide a "force" flag
+
+# Multi plugin mode
+if [[ -z "$2" ]]; then
+	for plugin ($ZILSH_PLUGINS); do
+		zilsh_update $1 $plugin
+	done
+else # single plugin mode
+	if [[ -z "$3" ]]; then
+		zilsh_update $1 $2 origin/master
+	else
+		pushd $1/$2
+		zilsh_fetch $1/$2
+		current_commit=$(git rev-parse HEAD)
+		upstream_commit=$(git rev-parse @{upstream})
+		
+		if [[ $current_commit == $upstream_commit ]]; then
+			git merge --ff-only @{upstream} ||
+				zilsh_error "An error occured while updating $2"
+		elif [[ -n "$4" ]]; then # FORCE MODE
+			git reset --hard @{upstream} ||
+				zilsh_error "An error occured while updating $2"
+		else
+			zilsh_error "Could not safely update $2; skipping."
+		fi
+	fi
+fi
